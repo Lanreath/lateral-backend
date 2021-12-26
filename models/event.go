@@ -7,7 +7,6 @@ import (
 
 type Event struct {
 	ID          primitive.ObjectID `bson:"id"`
-	CreatedBy   User               `bson:"inline"`
 	CreatedOn   primitive.DateTime `bson:"-"`
 	UpdatedOn   primitive.DateTime `bson:"-"`
 	Description string             `bson:"description" validate:"required"`

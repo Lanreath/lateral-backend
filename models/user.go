@@ -14,6 +14,8 @@ type User struct {
 	Email      string             `validate:"required, email"`
 	Password   string             `bson:"password" validate:"required"`
 	CreatedOn  primitive.DateTime `bson:"="`
+	Events     []*Event           `bson:"events,omitempty"`
+	Calendars  []*Calendar        `bson:"calendars,omitempty"`
 }
 
 func (p *User) Validate() error {
