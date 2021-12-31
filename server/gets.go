@@ -6,18 +6,16 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Lanreath/lateral-backend/models"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func GetAll(res http.ResponseWriter, req *http.Request, collection *mongo.Collection) {
+func (s *Server) GetUsers(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("content-type", "application/json")
 	var all []data
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	cur, err := collection.Find(ctx, bson.M{})
+	cur, err := s.db.Collection("users").Find(ctx, bson.M{})
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
@@ -31,22 +29,83 @@ func GetAll(res http.ResponseWriter, req *http.Request, collection *mongo.Collec
 	json.NewEncoder(res).Encode(all)
 }
 
-func (users Collections) GetUser(res http.ResponseWriter, req *http.Request) {
+func (s *Server) GetUser(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("content-type", "application/json")
 	params := mux.Vars(req)
-	var user models.User
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	id, _ := primitive.ObjectIDFromHex(params["id"])
-	cur, err := users.FindOne(ctx, models.User{ID: id}).Decode(&user)
+	err := s.db.Collection("users").FindOne(ctx, bson.M{"id": id}).Decode(bson.M{})
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
 		return
 	}
-	if err = cur.All(ctx, &user); err != nil {
+
+	json.NewEncoder(res).Encode(err)
+}
+
+func (s *Server) GetTasks(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("content-type", "application/json")
+	var all []data
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	cur, err := s.db.Collection("tasks").Find(ctx, bson.M{})
+	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
 		return
 	}
-	json.NewEncoder(res).Encode(user)
+	if err = cur.All(ctx, &all); err != nil {
+		res.WriteHeader(http.StatusInternalServerError)
+		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+		return
+	}
+	json.NewEncoder(res).Encode(all)
+}
+
+func (s *Server) GetTask(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("content-type", "application/json")
+	params := mux.Vars(req)
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	id, _ := primitive.ObjectIDFromHex(params["id"])
+	err := s.db.Collection("tasks").FindOne(ctx, bson.M{"id": id}).Decode(bson.M{})
+	if err != nil {
+		res.WriteHeader(http.StatusInternalServerError)
+		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+		return
+	}
+
+	json.NewEncoder(res).Encode(err)
+}
+
+func (s *Server) GetCalendars(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("content-type", "application/json")
+	var all []data
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	cur, err := s.db.Collection("calendars").Find(ctx, bson.M{})
+	if err != nil {
+		res.WriteHeader(http.StatusInternalServerError)
+		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+		return
+	}
+	if err = cur.All(ctx, &all); err != nil {
+		res.WriteHeader(http.StatusInternalServerError)
+		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+		return
+	}
+	json.NewEncoder(res).Encode(all)
+}
+
+func (s *Server) GetCalendar(res http.ResponseWriter, req *http.Request) {
+	res.Header().Set("content-type", "application/json")
+	params := mux.Vars(req)
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	id, _ := primitive.ObjectIDFromHex(params["id"])
+	err := s.db.Collection("calendars").FindOne(ctx, bson.M{"id": id}).Decode(bson.M{})
+	if err != nil {
+		res.WriteHeader(http.StatusInternalServerError)
+		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
+		return
+	}
+
+	json.NewEncoder(res).Encode(err)
 }
