@@ -16,7 +16,7 @@ func (s *Server) DeleteUser(res http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	id, _ := primitive.ObjectIDFromHex(params["id"])
-	ret, err := s.db.Collection("users").DeleteOne(ctx, bson.M{"id": id})
+	ret, err := s.Database.Collection("users").DeleteOne(ctx, bson.M{"id": id})
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
@@ -31,7 +31,7 @@ func (s *Server) DeleteTask(res http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	id, _ := primitive.ObjectIDFromHex(params["id"])
-	ret, err := s.db.Collection("tasks").DeleteOne(ctx, bson.M{"id": id})
+	ret, err := s.Database.Collection("tasks").DeleteOne(ctx, bson.M{"id": id})
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
@@ -46,7 +46,7 @@ func (s *Server) DeleteCalendar(res http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	id, _ := primitive.ObjectIDFromHex(params["id"])
-	ret, err := s.db.Collection("calendars").DeleteOne(ctx, bson.M{"id": id})
+	ret, err := s.Database.Collection("calendars").DeleteOne(ctx, bson.M{"id": id})
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))

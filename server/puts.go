@@ -19,7 +19,7 @@ func (s *Server) UpdateUser(res http.ResponseWriter, req *http.Request) {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	id, _ := primitive.ObjectIDFromHex(params["id"])
 	json.NewDecoder(req.Body).Decode(&user)
-	ret, err := s.db.Collection("users").UpdateOne(ctx, bson.M{"id": id}, bson.D{{"$set", user}})
+	ret, err := s.Database.Collection("users").UpdateOne(ctx, bson.M{"id": id}, bson.D{{"$set", user}})
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
@@ -36,7 +36,7 @@ func (s *Server) UpdateTask(res http.ResponseWriter, req *http.Request) {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	id, _ := primitive.ObjectIDFromHex(params["id"])
 	json.NewDecoder(req.Body).Decode(&task)
-	ret, err := s.db.Collection("tasks").UpdateOne(ctx, bson.M{"id": id}, bson.D{{"$set", task}})
+	ret, err := s.Database.Collection("tasks").UpdateOne(ctx, bson.M{"id": id}, bson.D{{"$set", task}})
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
@@ -53,7 +53,7 @@ func (s *Server) UpdateCalendar(res http.ResponseWriter, req *http.Request) {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	id, _ := primitive.ObjectIDFromHex(params["id"])
 	json.NewDecoder(req.Body).Decode(&calendar)
-	ret, err := s.db.Collection("calendars").UpdateOne(ctx, bson.M{"id": id}, bson.D{{"$set", calendar}})
+	ret, err := s.Database.Collection("calendars").UpdateOne(ctx, bson.M{"id": id}, bson.D{{"$set", calendar}})
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))

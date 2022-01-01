@@ -9,6 +9,8 @@ import (
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+
+	"github.com/Lanreath/lateral-backend/server"
 )
 
 func main() {
@@ -31,9 +33,9 @@ func main() {
 		}
 	}()
 
-	s := &Server{
-		db:     client.Database("MyFirstDatabase"),
-		router: mux.NewRouter(),
+	s := &server.Server{
+		Database: client.Database("MyFirstDatabase"),
+		Router:   mux.NewRouter(),
 	}
 
 }

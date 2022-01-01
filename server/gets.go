@@ -16,7 +16,7 @@ func (s *Server) GetUsers(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("content-type", "application/json")
 	var users []models.User
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	cur, err := s.db.Collection("users").Find(ctx, bson.M{})
+	cur, err := s.Database.Collection("users").Find(ctx, bson.M{})
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
@@ -36,7 +36,7 @@ func (s *Server) GetUser(res http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	id, _ := primitive.ObjectIDFromHex(params["id"])
-	err := s.db.Collection("users").FindOne(ctx, bson.M{"id": id}).Decode(&user)
+	err := s.Database.Collection("users").FindOne(ctx, bson.M{"id": id}).Decode(&user)
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
@@ -50,7 +50,7 @@ func (s *Server) GetTasks(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("content-type", "application/json")
 	var tasks []models.Task
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	cur, err := s.db.Collection("tasks").Find(ctx, bson.M{})
+	cur, err := s.Database.Collection("tasks").Find(ctx, bson.M{})
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
@@ -69,7 +69,7 @@ func (s *Server) GetTask(res http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	id, _ := primitive.ObjectIDFromHex(params["id"])
-	err := s.db.Collection("tasks").FindOne(ctx, bson.M{"id": id}).Decode(bson.M{})
+	err := s.Database.Collection("tasks").FindOne(ctx, bson.M{"id": id}).Decode(bson.M{})
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
@@ -83,7 +83,7 @@ func (s *Server) GetCalendars(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("content-type", "application/json")
 	var calendars []models.Calendar
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	cur, err := s.db.Collection("calendars").Find(ctx, bson.M{})
+	cur, err := s.Database.Collection("calendars").Find(ctx, bson.M{})
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
@@ -102,7 +102,7 @@ func (s *Server) GetCalendar(res http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	id, _ := primitive.ObjectIDFromHex(params["id"])
-	err := s.db.Collection("calendars").FindOne(ctx, bson.M{"id": id}).Decode(bson.M{})
+	err := s.Database.Collection("calendars").FindOne(ctx, bson.M{"id": id}).Decode(bson.M{})
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))

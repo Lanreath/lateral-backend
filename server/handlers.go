@@ -6,6 +6,6 @@ import (
 )
 
 type Server struct {
-	db     *mongo.Database
-	router *mux.Router
+	Database *mongo.Database
+	Router   *mux.Router
 }
