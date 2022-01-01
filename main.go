@@ -31,8 +31,9 @@ func main() {
 		}
 	}()
 
-	db := client.Database("MyFirstDatabase")
-
-	router := mux.NewRouter()
+	s := &Server{
+		db:     client.Database("MyFirstDatabase"),
+		router: mux.NewRouter(),
+	}
 
 }

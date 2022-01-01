@@ -14,7 +14,7 @@ type User struct {
 	Email      string             `validate:"required, email"`
 	Password   string             `bson:"password" validate:"required"`
 	CreatedOn  primitive.DateTime `bson:"="`
-	Events     []*Event           `bson:"events,omitempty"`
+	Tasks      []*Task            `bson:"events,omitempty"`
 	Calendars  []*Calendar        `bson:"calendars,omitempty"`
 }
 

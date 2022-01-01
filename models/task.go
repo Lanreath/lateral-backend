@@ -5,7 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type Event struct {
+type Task struct {
 	ID          primitive.ObjectID `bson:"id"`
 	CreatedOn   primitive.DateTime `bson:"-"`
 	UpdatedOn   primitive.DateTime `bson:"-"`
@@ -15,7 +15,7 @@ type Event struct {
 	Frequency   string             `bson:"frequency" validate:"required,frequency"`
 }
 
-func (p *Event) Validate() error {
+func (p *Task) Validate() error {
 	validate := validator.New()
 	validate.RegisterValidation("progress", validateProgress)
 	validate.RegisterValidation("frequency", validateFrequency)

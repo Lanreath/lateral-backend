@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Lanreath/lateral-backend/models"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -13,7 +14,7 @@ import (
 
 func (s *Server) GetUsers(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("content-type", "application/json")
-	var all []data
+	var users []models.User
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	cur, err := s.db.Collection("users").Find(ctx, bson.M{})
 	if err != nil {
@@ -21,20 +22,21 @@ func (s *Server) GetUsers(res http.ResponseWriter, req *http.Request) {
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
 		return
 	}
-	if err = cur.All(ctx, &all); err != nil {
+	if err = cur.All(ctx, &users); err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
 		return
 	}
-	json.NewEncoder(res).Encode(all)
+	json.NewEncoder(res).Encode(users)
 }
 
 func (s *Server) GetUser(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("content-type", "application/json")
+	var user models.User
 	params := mux.Vars(req)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	id, _ := primitive.ObjectIDFromHex(params["id"])
-	err := s.db.Collection("users").FindOne(ctx, bson.M{"id": id}).Decode(bson.M{})
+	err := s.db.Collection("users").FindOne(ctx, bson.M{"id": id}).Decode(&user)
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
@@ -46,7 +48,7 @@ func (s *Server) GetUser(res http.ResponseWriter, req *http.Request) {
 
 func (s *Server) GetTasks(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("content-type", "application/json")
-	var all []data
+	var tasks []models.Task
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	cur, err := s.db.Collection("tasks").Find(ctx, bson.M{})
 	if err != nil {
@@ -54,12 +56,12 @@ func (s *Server) GetTasks(res http.ResponseWriter, req *http.Request) {
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
 		return
 	}
-	if err = cur.All(ctx, &all); err != nil {
+	if err = cur.All(ctx, &tasks); err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
 		return
 	}
-	json.NewEncoder(res).Encode(all)
+	json.NewEncoder(res).Encode(tasks)
 }
 
 func (s *Server) GetTask(res http.ResponseWriter, req *http.Request) {
@@ -79,7 +81,7 @@ func (s *Server) GetTask(res http.ResponseWriter, req *http.Request) {
 
 func (s *Server) GetCalendars(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("content-type", "application/json")
-	var all []data
+	var calendars []models.Calendar
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	cur, err := s.db.Collection("calendars").Find(ctx, bson.M{})
 	if err != nil {
@@ -87,12 +89,12 @@ func (s *Server) GetCalendars(res http.ResponseWriter, req *http.Request) {
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
 		return
 	}
-	if err = cur.All(ctx, &all); err != nil {
+	if err = cur.All(ctx, &calendars); err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
 		return
 	}
-	json.NewEncoder(res).Encode(all)
+	json.NewEncoder(res).Encode(calendars)
 }
 
 func (s *Server) GetCalendar(res http.ResponseWriter, req *http.Request) {
