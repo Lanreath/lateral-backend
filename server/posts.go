@@ -18,7 +18,7 @@ func (s *Server) CreateUser(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	ret, err := s.db.Collection("users").InsertOne(ctx, user)
+	ret, err := s.Database.Collection("users").InsertOne(ctx, user)
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
@@ -36,7 +36,7 @@ func (s *Server) CreateTask(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	ret, err := s.db.Collection("tasks").InsertOne(ctx, task)
+	ret, err := s.Database.Collection("tasks").InsertOne(ctx, task)
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
@@ -54,7 +54,7 @@ func (s *Server) CreateCalendar(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	ret, err := s.db.Collection("calendars").InsertOne(ctx, calendar)
+	ret, err := s.Database.Collection("calendars").InsertOne(ctx, calendar)
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		res.Write([]byte(`{ "message": "` + err.Error() + `" }`))
