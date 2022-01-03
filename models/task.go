@@ -9,9 +9,10 @@ type Task struct {
 	ID          primitive.ObjectID `bson:"id"`
 	CreatedOn   primitive.DateTime `bson:"-"`
 	UpdatedOn   primitive.DateTime `bson:"-"`
-	Description string             `bson:"description" validate:"required"`
+	Title       string             `bson:"title" validate:"required"`
+	Description string             `bson:"description,omitempty"`
 	DateTime    primitive.DateTime `bson:"datetime" validate:"required"`
-	Status      string             `bson:"status" validate:"progress"`
+	Status      string             `bson:"status" validate:"progress,required"`
 	Frequency   string             `bson:"frequency" validate:"required,frequency"`
 }
 

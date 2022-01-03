@@ -11,7 +11,7 @@ type User struct {
 	LastName   string             `bson:"last_name" validate:"required"`
 	Age        int                `bson:"age,omitempty" validate:"gt=0,lte=150"`
 	Occupation string             `bson:"occupation,omit_empty"`
-	Email      string             `validate:"required, email"`
+	Email      string             `validate:"required,email"`
 	Password   string             `bson:"password" validate:"required"`
 	CreatedOn  primitive.DateTime `bson:"="`
 	Tasks      []*Task            `bson:"events,omitempty"`
